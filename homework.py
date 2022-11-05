@@ -67,19 +67,6 @@ class Running(Training):
     CALORIES_MEAN_SPEED_MULTIPLIER: int = 18
     CALORIES_MEAN_SPEED_SHIFT: float = 1.79
 
-    def __init__(
-        self,
-        action: int,
-        duration: int,
-        weight: int,
-    ):
-        super().__init__(
-            action,
-            duration,
-            weight,
-        )
-        self.type_training = 'Running'
-
     def get_spent_calories(self) -> float:
         """Own method of Running get spent calories. """
         return (((self.CALORIES_MEAN_SPEED_MULTIPLIER
@@ -107,13 +94,12 @@ class SportsWalking(Training):
             weight,
         )
         self.height = height
-        self.type_training = 'SportsWalking'
 
     def get_spent_calories(self) -> float:
         """Own method of SportsWalking get spent calories"""
         return (
                ((self.CALORIES_WEIGHT_MULTIPLIER * self.weight
-                + ((Training.get_mean_speed(self) * self.KMH_IN_MSEC)**2
+                + ((self.get_mean_speed() * self.KMH_IN_MSEC)**2
                  / (self.height / self.CM_IN_M))
                  * self.CALORIES_SPEED_HEIGHT_MULTIPLIER * self.weight)
                 * self.duration * self.MIN_IN_H))
@@ -140,7 +126,6 @@ class Swimming(Training):
         )
         self.length_pool = length_pool
         self.count_pool = count_pool
-        self.type_training = 'Swimming'
 
     def get_mean_speed(self) -> float:
         """Own method of Swimming get mean speed"""
@@ -156,12 +141,12 @@ class Swimming(Training):
 
 def read_package(workout_type: str, data: list) -> Training:
     """Read package data function."""
-    dict_data = {'SWM': Swimming,
-                 'RUN': Running,
-                 'WLK': SportsWalking
-                 }
+    etalon_data = {'SWM': Swimming,
+                   'RUN': Running,
+                   'WLK': SportsWalking
+                   }
     try:
-        object = dict_data[workout_type](*data)
+        object = etalon_data[workout_type](*data)
     except KeyError:
         raise Exception('No match for keys in dict.')
     return object
