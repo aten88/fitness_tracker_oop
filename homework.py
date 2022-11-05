@@ -141,15 +141,16 @@ class Swimming(Training):
 
 def read_package(workout_type: str, data: list) -> Training:
     """Read package data function."""
-    etalon_data = {'SWM': Swimming,
-                   'RUN': Running,
-                   'WLK': SportsWalking
-                   }
+    trainings_data = {'SWM': Swimming,
+                      'RUN': Running,
+                      'WLK': SportsWalking
+                      }
     try:
-        object = etalon_data[workout_type](*data)
+        training_object = trainings_data[workout_type](*data)
     except KeyError:
         raise Exception('No match for keys in dict.')
-    return object
+
+    return training_object
 
 
 def main(training: Training) -> None:
